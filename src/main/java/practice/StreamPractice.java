@@ -2,6 +2,7 @@ package practice;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import model.Candidate;
@@ -37,7 +38,7 @@ public class StreamPractice {
                 .map(index -> index % 2 == 0 ? numbers.get(index) : numbers.get(index) - 1)
                 .filter(number -> number % 2 != 0)
                 .average()
-                .getAsDouble();
+                .orElseThrow(NoSuchElementException::new);
     }
 
     /**
@@ -50,7 +51,7 @@ public class StreamPractice {
      */
     public List<Person> selectMenByAge(List<Person> peopleList, int fromAge, int toAge) {
         return peopleList.stream()
-                .filter(person -> person.getSex() == Person.Sex.MAN)
+                .filter(person -> Person.Sex.MAN.equals(person.getSex()))
                 .filter(person -> person.getAge() >= fromAge)
                 .filter(person -> person.getAge() <= toAge)
                 .collect(Collectors.toList());
@@ -70,7 +71,7 @@ public class StreamPractice {
                                           int maleToAge, List<Person> peopleList) {
         return peopleList.stream()
                 .filter(person -> person.getAge() >= fromAge)
-                .filter(person -> person.getSex() == Person.Sex.MAN
+                .filter(person -> Person.Sex.MAN.equals(person.getSex())
                         ? person.getAge() <= maleToAge
                         : person.getAge() <= femaleToAge)
                 .collect(Collectors.toList());
@@ -83,7 +84,7 @@ public class StreamPractice {
      */
     public List<String> getCatsNames(List<Person> peopleList, int femaleAge) {
         return peopleList.stream()
-                .filter(person -> person.getSex() == Person.Sex.WOMAN)
+                .filter(person -> Person.Sex.WOMAN.equals(person.getSex()))
                 .filter(person -> person.getAge() >= femaleAge)
                 .flatMap(person -> person.getCats().stream())
                 .map(Cat::getName)
